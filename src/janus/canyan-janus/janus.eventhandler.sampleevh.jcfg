@@ -1,0 +1,26 @@
+general: {
+	enabled = true
+	events = "all"		# Comma separated list of the events mask you're interested
+						# in. Valid values are none, sessions, handles, jsep, webrtc,
+						# media, plugins, transports, core, external and all. By
+						# default we subscribe to everything (all)
+	# events = "sessions, handles"
+	grouping = true		# Whether events should be sent individually (one per
+						# HTTP POST, JSON object), or if it's ok to group them
+						# (one or more per HTTP POST, JSON array with objects)
+						# The default is 'yes' to limit the number of connections.
+	json = "compact"
+	#compress = true	# Optionally, the JSON messages can be compressed using zlib
+	#compression = 9	# In case, you can specify the compression factor, where 1 is
+						# the fastest (low compression), and 9 gives the best compression
+						# Address the plugin will send all events to as HTTP POST
+						# requests with an application/json payload. In case
+						# authentication is required to contact the backend, set
+						# the credentials as well (basic authentication only).
+	backend = "{{METRIC_COLLECTOR_URL}}"
+	#backend_user = "myuser"
+	#backend_pwd = "mypwd"
+
+	#max_retransmissions = 5
+	#retransmissions_backoff = 100
+}

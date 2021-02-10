@@ -1,0 +1,26 @@
+{
+  "icons": [
+    {
+      "src": "icon_512x512.27f2880700cd02fe09aa71289ac8b7f7.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_192x192.4b84f1f7e81945d33680dacbfc230eaa.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_64x64.c92b85a5b907c70211f4ec25e29a8c4a.ico",
+      "sizes": "64x64",
+      "type": "image/vnd.microsoft.icon"
+    }
+  ],
+  "name": "WebRTC Demo",
+  "short_name": "WebRTC Demo",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": ".",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
