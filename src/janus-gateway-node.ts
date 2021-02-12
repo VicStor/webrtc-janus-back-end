@@ -5,6 +5,7 @@ const uuidv1 = require('uuid').v1;
 const WebSocket = require('ws');
 const url = require('url');
 const util = require('util');
+const metadata = require('node-ec2-metadata');
 
 import logger from './logger';
 import { JanusInstance } from './janus-gateway-instance';
@@ -312,6 +313,10 @@ export class Janus {
     let udpStart = 20000;
     let udpEnd = udpStart + step - 1;
     this.logger.info(`Launching ${instances.length} Janus containers`);
+    const ec2Ip = await metadata.isEC2().then((onEC2) => {
+      console.log('Running on EC2? ' + onEC2);
+      return onEC2 ? metadata.getMetadataForInstance('public-ipv4') : null;
+    });
 
     instances.forEach(async (JanusInstanceDefinition, i) => {
       await this.runContainer(
@@ -323,12 +328,22 @@ docker run -i --rm \\
   -p 8088:8088 \\
   -p 7188:7188 \\
   -p 7088:7088 \\
-  -v ${config.janusConfigsDir}/janus.transport.websockets.jcfg:/usr/local/etc/janus/janus.transport.websockets.jcfg \\
-  -v ${config.janusConfigsDir}/janus.transport.http.jcfg:/usr/local/etc/janus/janus.transport.http.jcfg \\
-  -v ${config.janusConfigsDir}/janus.eventhandler.sampleevh.jcfg:/usr/local/etc/janus/janus.eventhandler.sampleevh.jcfg \\
-  canyan/janus-gateway:0.10.7
-    `,
-        { maxBuffer, containerName: JanusInstanceDefinition.server_name },
+  -v ${
+    config.janusConfigsDir
+  }/janus.transport.websockets.jcfg:/usr/local/etc/janus/janus.transport.websockets.jcfg \\
+  -v ${
+    config.janusConfigsDir
+  }/janus.transport.http.jcfg:/usr/local/etc/janus/janus.transport.http.jcfg \\
+  -v ${
+    config.janusConfigsDir
+  }/janus.eventhandler.sampleevh.jcfg:/usr/local/etc/janus/janus.eventhandler.sampleevh.jcfg \\
+  canyan/janus-gateway:0.10.7 /usr/local/bin/janus -F /usr/local/etc/janus --rtp-port-range=${udpStart}-${udpEnd} ${
+          ec2Ip ? '--nat-1-1=' + ec2Ip : ''
+        }`,
+        {
+          maxBuffer,
+          containerName: JanusInstanceDefinition.server_name,
+        },
       );
 
       udpStart += step;

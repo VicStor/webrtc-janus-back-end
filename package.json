@@ -45,6 +45,7 @@
         "janus-gateway-node": "^0.0.96",
         "lodash": "^4.17.11",
         "moment-range": "^4.0.2",
+        "node-ec2-metadata": "0.0.5",
         "pm2": "^4.5.1",
         "raf": "^3.4.0",
         "ramda": "^0.26.1",
